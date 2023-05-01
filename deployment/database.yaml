@@ -20,11 +20,15 @@ spec:
     requests:
       storage: 1Gi
 ---
-apiVersion: v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
   template:
     metadata:
       labels:
@@ -56,9 +60,6 @@ spec:
           volumeMounts:
             - name: postgres-storage
               mountPath: /var/lib/postgresql/data
-            - name: postgres-init
-              configMap:
-                name: init-sql
 ---
 apiVersion: v1
 kind: Service
