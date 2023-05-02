@@ -18,7 +18,7 @@ spec:
         app: kubik-db
     spec:
       containers:
-        - image: flathumor/kubik-db:2.1
+        - image: flathumor/kubik-db:2.2
           name: kubik-db
           env:
             - name: SPRING_BOOT_PORT
@@ -50,3 +50,19 @@ spec:
   type: ClusterIP
 status:
   loadBalancer: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kubik-ingress
+spec:
+  rules:
+    - http:
+        paths:
+          - pathType: Prefix
+            path: /api
+            backend:
+              service:
+                name: kubik-db
+                port:
+                  number: 9090
