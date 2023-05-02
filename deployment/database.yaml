@@ -6,7 +6,14 @@ metadata:
 data:
   postgres_user: root
   postgres_password: root
-  init-sql: |
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init-config
+  namespace: default
+data:
+  init.sql: |
     CREATE DATABASE kubik;
 ---
 apiVersion: v1
@@ -38,6 +45,9 @@ spec:
         - name: postgres-storage
           persistentVolumeClaim:
             claimName: postgres-pv-claim
+        - name: postgres-init-volume
+          configMap:
+            name: postgres-init-config
       containers:
         - image: postgres:10
           name: postgres
@@ -60,6 +70,8 @@ spec:
           volumeMounts:
             - name: postgres-storage
               mountPath: /var/lib/postgresql/data
+            - name: postgres-init-volume
+              mountPath: /docker-entrypoint-initdb.d
 ---
 apiVersion: v1
 kind: Service
