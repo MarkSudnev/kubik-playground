@@ -18,7 +18,7 @@ spec:
         app: kubik-db
     spec:
       containers:
-        - image: flathumor/kubik:2.3
+        - image: flathumor/kubik:2.4-lite
           name: kubik-db
           env:
             - name: SPRING_BOOT_PORT
