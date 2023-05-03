@@ -1,6 +1,5 @@
-FROM openjdk:11
-COPY . /usr/src/kubikapp
-WORKDIR /usr/src/kubikapp
-RUN ./gradlew clean assemble
-WORKDIR /usr/src/kubikapp/build/libs
-CMD ["java", "-jar", "kubik-0.0.1-SNAPSHOT.jar"]
+FROM arm64v8/eclipse-temurin:11-jre
+WORKDIR application
+COPY ./build/libs/*jar ./app.jar
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
