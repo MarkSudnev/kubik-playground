@@ -1,0 +1,17 @@
+{
+  "hosts": [
+    "kubik-svc.kubik-ns.svc.cluster.local",
+    "localhost",
+    "192.168.58.1"
+  ],
+  "CN": "kubik-svc.kubik-ns.svc.cluster.local",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [{
+    "C": "PL",
+    "L": "Wroclaw",
+    "ST": "Lower Silesia"
+  }]
+}
