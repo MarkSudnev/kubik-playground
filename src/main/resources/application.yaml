@@ -3,6 +3,13 @@ server:
   error:
     include-message: always
     include-binding-errors: always
+  ssl:
+    key-store: classpath:keystore/springkubik.p12
+    key-store-type: pkcs12
+    key-store-password: springkubikpass
+    key-alias: springkubik
+    key-password: springkubikpass
+    enabled: true
 
 general:
   time-zone: UTC
