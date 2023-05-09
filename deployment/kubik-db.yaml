@@ -5,6 +5,7 @@ metadata:
   labels:
     app: kubik-db
   name: kubik-db
+  namespace: kubik
 spec:
   replicas: 1
   selector:
@@ -39,6 +40,7 @@ metadata:
   labels:
     app: kubik-db
   name: kubik-db
+  namespace: kubik
 spec:
   ports:
     - name: 9090-9090
@@ -55,9 +57,11 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: kubik-ingress
+  namespace: kubik
 spec:
   rules:
-    - http:
+    - host: kubik.sudnev.local
+      http:
         paths:
           - pathType: Prefix
             path: /api
@@ -66,3 +70,7 @@ spec:
                 name: kubik-db
                 port:
                   number: 9090
+  tls:
+    - hosts:
+      - kubik.sudnev.local
+      secretName: kubik-tls-secret

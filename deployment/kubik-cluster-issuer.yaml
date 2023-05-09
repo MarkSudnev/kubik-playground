@@ -1,0 +1,7 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: kubik-clusterissuer
+spec:
+  ca:
+    secretName: kubik-ca-secret

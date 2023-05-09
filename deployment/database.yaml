@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: postgres-config
-  namespace: default
+  namespace: kubik
 data:
   postgres_user: root
   postgres_password: root
@@ -11,7 +11,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: postgres-init-config
-  namespace: default
+  namespace: kubik
 data:
   init.sql: |
     CREATE DATABASE kubik;
@@ -20,6 +20,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: postgres-pv-claim
+  namespace: kubik
 spec:
   accessModes:
     - ReadWriteOnce
@@ -31,6 +32,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres
+  namespace: kubik
 spec:
   replicas: 1
   selector:
@@ -77,6 +79,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres
+  namespace: kubik
 spec:
   type: ClusterIP
   ports:
