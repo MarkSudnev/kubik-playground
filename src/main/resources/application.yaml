@@ -9,6 +9,20 @@ general:
   local-datetime-format: yyyy-MM-dd'T'HH:mm:ss'Z'
   local-date-format: yyyy-MM-dd
 
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: ["health", "prometheus", "metrics"]
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+
 spring:
   application:
     name: Kubik

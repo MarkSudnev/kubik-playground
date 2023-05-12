@@ -2,6 +2,7 @@ version: "3.7"
 
 volumes:
   kubik-database:
+  kubik-grafana:
 
 services:
 
@@ -17,3 +18,26 @@ services:
     volumes:
       - ./database-init.sql:/docker-entrypoint-initdb.d/init.sql
       - kubik-database:/var/lib/postgresql/data
+
+  kubik-prometheus:
+    image: prom/prometheus:v2.38.0
+    container_name: kubik-prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yaml"
+    ports:
+      - "9090:9090"
+
+  kubik-grafana:
+    image: grafana/grafana-oss:9.1.4
+    container_name: kubik-grafana
+    depends_on:
+      - kubik-prometheus
+    ports:
+      - "3000:3000"
+    volumes:
+      - kubik-grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SERVER_DOMAIN=localhost

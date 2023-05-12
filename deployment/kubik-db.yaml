@@ -1,21 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
   labels:
-    app: kubik-db
-  name: kubik-db
+    app: kubik-dpl
+  name: kubik-dpl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: kubik-db
-  strategy: {}
+      app: kubik-dpl
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        app: kubik-db
+        app: kubik-dpl
     spec:
       containers:
         - image: flathumor/kubik:2.4-lite
@@ -24,29 +21,26 @@ spec:
             - name: SPRING_BOOT_PORT
               value: "9090"
             - name: DATABASE_URL
-              value: "jdbc:postgresql://postgres:5432/kubik"
+              value: "jdbc:postgresql://postgres-svc:5432/kubik"
             - name: DATABASE_USERNAME
               value: "root"
             - name: DATABASE_PASSWORD
               value: "root"
-          resources: {}
-status: {}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  creationTimestamp: null
   labels:
-    app: kubik-db
-  name: kubik-db
+    app: kubik-svc
+  name: kubik-svc
 spec:
   ports:
-    - name: 9090-9090
+    - name: kubik-svc-port
       port: 9090
       protocol: TCP
       targetPort: 9090
   selector:
-    app: kubik-db
+    app: kubik-dpl
   type: ClusterIP
 status:
   loadBalancer: {}
@@ -63,6 +57,6 @@ spec:
             path: /api
             backend:
               service:
-                name: kubik-db
+                name: kubik-svc
                 port:
                   number: 9090
