@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-dpl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus-dpl
+  template:
+    metadata:
+      labels:
+        app: prometheus-dpl
+    spec:
+      volumes:
+        - name: prometheus-conf-volume
+          configMap:
+            name: prometheus-cm
+            items:
+              - key: prometheus.yaml
+                path: prometheus.yaml
+      containers:
+        - name: prometheus
+          image: prom/prometheus:v2.38.0
+          command: ["--config.file=/etc/prometheus/prometheus.yaml"]
+          ports:
+            - containerPort: 9090
+          volumeMounts:
+            - name: prometheus-conf-volume
+              mountPath: /etc/prometheus
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-svc
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9090
+  selector:
+    app: prometheus-dpl
