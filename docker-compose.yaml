@@ -19,6 +19,17 @@ services:
       - ./database-init.sql:/docker-entrypoint-initdb.d/init.sql
       - kubik-database:/var/lib/postgresql/data
 
+  kubik-application:
+    build: .
+    container_name: kubik-application
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_BOOT_PORT=8080
+      - DATABASE_URL=jdbc:postgresql://kubik-database:5432/kubik
+    depends_on:
+      - kubik-database
+
   kubik-prometheus:
     image: prom/prometheus:v2.38.0
     container_name: kubik-prometheus
@@ -28,6 +39,8 @@ services:
       - "--config.file=/etc/prometheus/prometheus.yaml"
     ports:
       - "9090:9090"
+    depends_on:
+      - kubik-application
 
   kubik-grafana:
     image: grafana/grafana-oss:9.1.4
