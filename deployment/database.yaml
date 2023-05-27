@@ -17,15 +17,34 @@ data:
     CREATE DATABASE kubik;
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgres-pv
+  labels:
+    type: local
+spec:
+  storageClassName: local-storage
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/opt/data/postgres"
+  claimRef:
+    name: postgres-pvc
+    namespace: default
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: postgres-pv-claim
+  name: postgres-pvc
 spec:
+  storageClassName: local-storage
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 800Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -44,7 +63,7 @@ spec:
       volumes:
         - name: postgres-storage
           persistentVolumeClaim:
-            claimName: postgres-pv-claim
+            claimName: postgres-pvc
         - name: postgres-init-volume
           configMap:
             name: postgres-init-config

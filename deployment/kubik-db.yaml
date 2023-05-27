@@ -15,11 +15,11 @@ spec:
         app: kubik-dpl
     spec:
       containers:
-        - image: flathumor/kubik:2.4-lite
+        - image: flathumor/kubik:2.5-lite
           name: kubik-db
           env:
             - name: SPRING_BOOT_PORT
-              value: "9090"
+              value: "8090"
             - name: DATABASE_URL
               value: "jdbc:postgresql://postgres-svc:5432/kubik"
             - name: DATABASE_USERNAME
@@ -36,9 +36,9 @@ metadata:
 spec:
   ports:
     - name: kubik-svc-port
-      port: 9090
+      port: 8090
       protocol: TCP
-      targetPort: 9090
+      targetPort: 8090
   selector:
     app: kubik-dpl
   type: ClusterIP
@@ -59,4 +59,4 @@ spec:
               service:
                 name: kubik-svc
                 port:
-                  number: 9090
+                  number: 8090
